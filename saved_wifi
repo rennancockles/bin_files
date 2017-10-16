@@ -1,0 +1,10 @@
+#! /bin/bash
+
+if [ `id -u` != "0" ]; then
+  echo "Must be root!";
+  exit 2;
+fi
+
+for f in /etc/NetworkManager/system-connections/*; do
+  grep -E 'ssid=|psk=' "$f" | sed -r 's/.*=(.*)/\1/' | paste -sd ':';
+done | grep ':' | sort -u

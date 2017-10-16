@@ -1,0 +1,22 @@
+#! /bin/bash
+
+if [ "$1" == "" ] || [ "$(echo $1 | tr '.' '\n' | wc -l)" -lt "4" ]; then
+  echo "Destination needed!";
+  exit 2;
+fi
+
+for i in $(seq 1 255); do
+  ip="$(echo "$(echo $1 | cut -d '.' -f 1-3).$i")"
+  echo "[-] Testando $ip"
+
+  if [ $(ping -c1 -W1 $ip | grep icmp* | wc -l) -gt 0 ]; then
+    if [ -n "$(nmap -sT -p80 $ip | grep 80/ | tr ' ' '\n' | grep open)" ]; then
+      title="$(curl -s -m 3 $ip | grep title | cut -d ">" -f2 | cut -d "<" -f1)"
+
+      [ -n "$(echo $title | grep GREATE)" ] && echo "  [+] GigaMobile - $ip" || echo "  [*] $title"
+      #if [ "$title" == "GREATEK" ]; then
+      #  echo "[+] GigaMobile - $ip"
+      #fi
+    fi
+  fi
+done

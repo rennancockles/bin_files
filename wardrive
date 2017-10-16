@@ -1,0 +1,24 @@
+#! /bin/bash
+
+[ -z $1 ] && exit;
+
+IFS='\n';
+
+TOTAL_LINES=$(cat $1 | grep 'BSSID' | grep -E 'BSSID: <b>..\:' | wc -l)
+SEC=$(cat $1 | grep -E 'BSSID: <b>..\:' | grep -oE 'Capabilities: <b>\[.*\]<\/b>' | cut -d'>' -f2 | cut -d'<' -f1 )
+
+WPA_LINES=$(echo $SEC | grep 'WPA' | wc -l)
+WEP_LINES=$(echo $SEC | grep 'WEP' | wc -l)
+OPEN_LINES=$(echo $SEC | grep -Ev 'WPA|WEP|IBSS' | wc -l)
+IBSS_LINES=$(echo $SEC | grep 'IBSS' | wc -l)
+
+
+echo Total de redes wifi: $TOTAL_LINES
+echo
+
+echo "$(
+  echo "Redes WPA: ; $WPA_LINES ; $(echo "scale=3; ($WPA_LINES * 100 / $TOTAL_LINES)" | bc)% "
+  echo "Redes WEP: ; $WEP_LINES ; $(echo "scale=3; ($WEP_LINES * 100 / $TOTAL_LINES)" | bc)% "
+  echo "Redes abertas: ; $OPEN_LINES ; $(echo "scale=3; ($OPEN_LINES * 100 / $TOTAL_LINES)" | bc)% "
+  echo "Redes IBSS: ; $IBSS_LINES ; $(echo "scale=3; ($IBSS_LINES * 100 / $TOTAL_LINES)" | bc)% "
+)" | column -s';' -t
