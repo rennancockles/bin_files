@@ -1,0 +1,13 @@
+#! /bin/bash
+
+if [ "$1" == "" ] || [ "$(echo $1 | tr '.' '\n' | wc -l)" -lt "4" ]; then
+  ip="$(curl -s ifconfig.co)";
+else
+  ip=$1;  
+fi
+
+autnum="$(whois $ip | grep "aut" | tr -d " " | cut -d ":" -f2)"
+
+sleep 1 
+
+whois $autnum

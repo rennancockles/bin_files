@@ -1,0 +1,34 @@
+#!/usr/bin/python -B
+# -*- coding: utf-8 -*-
+
+import argparse
+
+
+def rotn(word, number):
+    result = []
+    for letter in word:
+        if letter.isupper():
+            result.append(chr((ord(letter) - ord('A') + number) % 26 + ord('A')))
+        elif letter.islower():
+            result.append(chr((ord(letter) - ord('a') + number) % 26 + ord('a')))
+        else:
+            result.append(letter)
+    return ''.join(result)
+
+
+parser = argparse.ArgumentParser(
+    prog='rotn',
+    usage='%(prog)s word [-n NUMBER]',
+    description='ROT-N algorithm for words'
+)
+
+parser.add_argument("w", metavar="word", type=str, help="word to rotate")
+parser.add_argument("-n", metavar="number", type=int, help="number of rot")
+
+args = parser.parse_args()
+
+if args.n is None:
+    for n in range(1, 27):
+        print "ROT-" + str(n) + " => " + rotn(args.w, n)
+else:
+    print "ROT-" + str(args.n) + " => " + rotn(args.w, args.n)

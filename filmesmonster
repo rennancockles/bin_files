@@ -1,0 +1,8 @@
+#! /bin/bash
+
+filmes="$(curl -s www.filmesmonster.com | hxnormalize -x | hxselect -i 'h2.entry-title')"
+
+[ -n "$1" ] && echo $filmes | lynx -stdin -dump | grep -E "\[$1\]| $1\." || echo $filmes | lynx -stdin -dump | grep '\['
+
+
+

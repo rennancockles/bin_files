@@ -1,0 +1,10 @@
+#! /bin/bash
+
+if [ "$1" == "" ]; then
+  echo "Insert a MAC Address!";
+  exit 2;
+fi
+
+curl http://api.macvendors.com/$1;
+echo
+

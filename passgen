@@ -1,0 +1,20 @@
+#! /bin/bash
+
+if [ "$1" == "" ]; then
+  echo "User needed!";
+  exit 2;
+fi
+
+PASS_NUMBER=1000000
+
+i="$(echo $1 | cut -d '.' -f 1 | head -c 1)"
+l="$(echo $1 | cut -d '.' -f 2 | head -c 1)"
+
+crunch 8 8  + + + '_#!@$?%&*-+=' -t "$i$l^%%%%^" -d 1% -c $PASS_NUMBER &> /tmp/passlist;
+
+passwd="$(tail -n +7 /tmp/passlist | shuf | sed -n $(((RANDOM % $PASS_NUMBER) + 1))p)"
+
+rm /tmp/passlist
+
+echo "$1"
+echo $passwd
